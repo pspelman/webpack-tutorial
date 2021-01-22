@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {ModuleFederationPlugin} = require('webpack').container
 
 module.exports = {
-    entry: 'hello-world',
+    entry: './src/hello-world.js',
     output: {
         filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, './dist'),
@@ -54,7 +54,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: 'hello-world.html',
             title: 'Hello world',
-            description: 'some description',
+            description: 'the hello world button and stuff',
             template: 'src/page-template.hbs'
         }),
         new ModuleFederationPlugin({
