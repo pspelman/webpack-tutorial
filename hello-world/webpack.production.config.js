@@ -58,7 +58,7 @@ module.exports = {
             template: 'src/page-template.hbs'
         }),
         new ModuleFederationPlugin({
-            name: 'HelloWorldApp',  // Application name to export to the outer world
+            name: 'HelloWorldApp',
             filename: 'remoteEntry.js',
             exposes: {
                 './HelloWorldButton': './src/components/hello-world-button/hello-world-button.js'
