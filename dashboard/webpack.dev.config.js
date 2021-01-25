@@ -3,36 +3,24 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const {ModuleFederationPlugin} = require('webpack').container
 
-
 module.exports = {
-  entry: {
-    'kiwi': './src/kiwi.js'
-  },
+  entry: './src/dashboard.js',
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, './dist'),
-    publicPath: 'http://localhost:9002/'
+    publicPath: 'http://localhost:9000/'
   },
   mode: 'development',
   devServer: {
     contentBase: path.resolve(__dirname, './dist'),
-    index: 'kiwi.html',
-    port: 9002
+    index: 'dashboard.html',
+    port: 9000,
+    historyApiFallback: {
+      index: 'dashboard.html'
+    }
   },
   module: {
     rules: [
-      {
-        test: /\.(png|jpg)$/,
-        use: [
-          'file-loader'
-        ]
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          'style-loader', 'css-loader', 'sass-loader'
-        ]
-      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -40,14 +28,14 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/env'],
-            // plugins: [ '@babel/plugin-proposal-class-properties' ]
+            plugins: ['@babel/plugin-proposal-class-properties']
           }
         }
       },
       {
-        test: /\.hbs$/,
+        test: /\.scss$/,
         use: [
-          'handlebars-loader'
+          'style-loader', 'css-loader', 'sass-loader'
         ]
       }
     ]
@@ -55,18 +43,18 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      filename: 'kiwi.html',
-      // chunks: ['kiwi'],
-      title: 'Kiwi',
-      description: 'Kiwi',
-      template: 'src/page-template.hbs'
+      filename: 'dashboard.html',
+      title: 'Dashboard',
+      // description: 'Dashboard',
+      // template: 'src/page-template.hbs'
     }),
     new ModuleFederationPlugin({
-      name: 'KiwiApp',
-      filename: 'remoteEntry.js',
-      exposes: {
-        './KiwiPage': './src/components/kiwi-page/kiwi-page.js'
+      name: 'App',
+      remotes: {
+        HelloWorldApp: 'HelloWorldApp@http://localhost:9001/remoteEntry.js',
+        KiwiApp: 'KiwiApp@http://localhost:9002/remoteEntry.js',
       }
-    })
+    }),
+
   ]
 }
